@@ -1,6 +1,8 @@
 package com.crud.democrud.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
@@ -14,6 +16,9 @@ public class UsuarioModel {
     private String nombre;
     private String email;
     private Integer prioridad;
+
+    @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL)
+    private Set<UsuarioRolModel> rol = new HashSet<>();
 
     public void setPrioridad(Integer prioridad) {
         this.prioridad = prioridad;
@@ -57,4 +62,14 @@ public class UsuarioModel {
         this.email = email;
     }
 
+    public Set<UsuarioRolModel> getRol() {
+        return rol;
+    }
+
+    public void setRol(Set<UsuarioRolModel> rol) {
+        this.rol = rol;
+        for (UsuarioRolModel UsuRol: rol){
+            UsuRol.setUsuario(this);
+        }
+    }
 }

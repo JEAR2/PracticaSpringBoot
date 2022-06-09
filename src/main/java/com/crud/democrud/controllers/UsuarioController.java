@@ -4,6 +4,7 @@ import com.crud.democrud.models.UsuarioModel;
 import com.crud.democrud.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -47,5 +48,27 @@ public class UsuarioController {
     }
 
 
+    @PutMapping(path = "/{id}")
+    public UsuarioModel editarUsuario(@PathVariable("id") Long id,@Validated @RequestBody UsuarioModel usuario){
+        Optional<UsuarioModel> usuarioOptional = usuarioService.obtenerPorId(id);
+        if(!usuarioOptional.isPresent()){
+            return usuarioOptional.orElseThrow();
+        }
+        usuario.setId(usuarioOptional.get().getId());
+        usuario.setEmail(usuarioOptional.get().getEmail());
+        usuario.setPrioridad(usuarioOptional.get().getPrioridad());
 
+
+        return usuarioService.guardarUsuario(usuario);
+
+    }
+
+/*
+    @PutMapping("/usuario/{ib}")
+    public UsuarioModel actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioModel usuario){
+        Optional<UsuarioModel> usuarioModelActual = usuarioService.obtenerPorId(id);
+        ifusuarioModelActual.isPresent()
+        return usuarioService.actualizarUsuario(usuario);
+    }
+*/
 }
